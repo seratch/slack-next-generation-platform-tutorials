@@ -226,7 +226,7 @@ By the way, if you stopped the `slack run` command before testing the trigger, y
 
 ## Hello World with Link Trigger
 
-You've learned how to generate and use a webhook trigger. Next, let's try the "link" trigger, which enables people to start interactive workflows by clicking a "link" in the Slack client UI.
+You've learned how to generate and use a webhook trigger. Next, let's try a "link" trigger, which enables people to start interactive workflows by clicking a "link" in the Slack client UI.
 
 Edit `workflow_and_trigger.ts` as below:
 
