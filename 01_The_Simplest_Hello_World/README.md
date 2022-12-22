@@ -172,7 +172,7 @@ You can run `slack triggers create` command to generate a trigger with prepared 
 You'll see two options on the screen. Select the latter one with `(dev)` suffix this time.
 
 ```bash
-$ slack triggers create --trigger-def ./hello_world.ts
+$ slack triggers create --trigger-def ./workflow_and_trigger.ts
 ? Choose an app  [Use arrows to move, type to filter]
    seratch  T03E94MJU
    App is not installed to this workspace
@@ -186,7 +186,7 @@ If you encounter a "workflow not found" error, it means either that you might fo
 When it succeeds, you'll see the following output. The generated webhook URL can start your workflow. There is no authentication for the HTTP requests. Please don't share the URL publicly to avoid abuse by strangers.
 
 ```bash
-$ slack triggers create --trigger-def ./hello_world.ts
+$ slack triggers create --trigger-def ./workflow_and_trigger.ts
 ? Choose an app  seratch (dev)  T03E94MJU
    dreamy-gazelle-453 (dev) A04DHV08MPF
 
