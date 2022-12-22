@@ -58,7 +58,7 @@ Connected, awaiting events
 
 If you see `Connected, awaiting events` log message, the app is successfully connected to Slack! You can hit "Ctrl + C" to terminate the local app process if you want to stop the app.
 
-This app is still empty. So, let's add some files to the project. As you may already notice, Slack's next-generation platform apps run on [Deno runtime](https://deno.land/), a novel JavaScript runtime. Thus, for coding and editing files in your project, using [VS Code](https://code.visualstudio.com/) along with [the official Deno plugin](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno) is the best recommended. 
+This app is still empty. So, let's add some files to the project. As you may already notice, Slack's next-generation platform apps run on [Deno](https://deno.land/), a novel JavaScript runtime. Thus, for coding and editing files in your project, using [VS Code](https://code.visualstudio.com/) along with [the official Deno plugin](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno) is the best recommended.
 
 ## Hello World with Webhook Trigger
 
