@@ -314,6 +314,8 @@ You've learned the following points with this hands-on tutorial:
 * Create a webhook trigger to start a workflow
 * Create a link trigger to start a workflow
 
+The complete project is available at https://github.com/seratch/slack-next-generation-platform-tutorials/tree/main/01_The_Simplest_Hello_World
+
 To make things as simple as possible, I've used a single source file named `workflow_and_trigger.ts` to define a workflow and a trigger. It works! But it's generally recommended to organize your files in the following structure:
 
 ```bash
