@@ -16,7 +16,7 @@ Also, as of this writing (December 2022), the new platform feature is still in o
 
 OK, now you're ready to build your first app. Let's get started!
 
-## Create a blank project
+## Create a Blank Project
 
 When you start a new project, you can run `slack create` command:
 
@@ -73,7 +73,7 @@ To learn how a trigger works, let's try an Incoming Webhooks Trigger as the firs
 * Create a trigger by running `slack triggers create --trigger-def ./workflow_and_trigger.ts`
 * Send a POST request to the webhook URL to start the workflow
 
-### Create `workflow_and_trigger.ts`, which includes a workflow and its trigger
+### Define a Workflow and its Trigger
 
 Create a new file named `workflow_and_trigger.ts` and then save the following code.
 
@@ -121,7 +121,7 @@ This source file does two things:
 
 There are still a few steps to reflect these changes for your app. So move on to the next.
 
-#### Grab a channel ID in your Slack workspace and embed it in the code
+### Grab a Channel ID
 
 You may notice a TODO comment in `workflow_and_trigger.ts`:
 
@@ -137,7 +137,7 @@ Alternatively, you can click "Copy link" in the message menu of any messages in 
 
 Either way, edit your `workflow_and_trigger.ts` with the channel ID string.
 
-### Add the workflow to `manifest.ts`
+### Add the Workflow to `manifest.ts`
 
 Next, add the workflow to `manifest.ts` as below. Then, import the `workflow` constant in `manifest.ts` and add the reference to the object in the `workflows` array.
 
@@ -157,13 +157,13 @@ export default Manifest({
 });
 ```
 
-### Re-install the app with the latest settings by running `slack run`
+### Re-install the App
 
 All the necessary file changes are done! If you've stopped the `slack run` command execution in a terminal, run the same command again. If you don't see any errors in the outputs, everything should be great.
 
 It's OK to stop `slack run` command, but for the following steps, you will use a terminal window to run a different command. So opening a new one for the following steps and keeping this `slack run` window would be smooth.
 
-### Create a trigger by running `slack triggers create --trigger-def ./workflow_and_trigger.ts`
+### Create a Webhook Trigger
 
 Now that the workflow is available on the Slack cloud hosting infra side, you can generate its webhook trigger. This situation may need to be clarified; Just adding a workflow to your app's manifest does not automatically create the workflow's triggers. Thus, you need to generate a trigger on your own.
 
@@ -197,7 +197,7 @@ $ slack triggers create --trigger-def ./workflow_and_trigger.ts
    Webhook URL:  https://hooks.slack.com/triggers/T11111/22222/xxxxx
 ```
 
-### Send a POST request to the webhook URL to start the workflow
+### Send a POST Request to the Webhook URL
 
 It's time to run your first-ever workflow! You can send an HTTP POST request towards the webhook URL:
 
@@ -305,7 +305,7 @@ Let's click the link! You'll see a "Hello World!" message in the channel shortly
 
 <img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/19163/e736f119-4eac-4a5b-a3be-aaf5ec89615e.png" width=500 />
 
-### Wrapping Up
+## Wrapping Up
 
 You've learned the following points with this hands-on tutorial:
 

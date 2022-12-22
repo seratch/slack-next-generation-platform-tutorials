@@ -13,8 +13,8 @@ export const def = DefineFunction({
   // A 3rd party module "deno_slack_source_file_resolver" automatically resolves the relative path
   source_file: FunctionSourceFile(import.meta.url),
 
-  // Define all the possible inputs with thier names and types:
-  // Having description too would be helpful for long-term maintenance but it's optional.
+  // Define all the possible inputs with their names and types:
+  // Having a description would be helpful for long-term maintenance, but it's optional.
   // You can access the properties inside your function handler code.
   input_parameters: {
     properties: {
@@ -29,7 +29,7 @@ export const def = DefineFunction({
     required: ["channel_id", "message"],
   },
   // Define all the possible outputs when the function execution succeeds:
-  // When it fails and you'd like to immediately terminate the workflow execution, your function code should return an error string instead outputs.
+  // When it fails, and you'd like to terminate the workflow execution immediately, your function code should return an error string instead outputs.
   // Otherwise, it's also a good approach to include some error state in outputs,
   // and then let the following functions handle the error outcome.
   output_parameters: {
@@ -42,17 +42,17 @@ export const def = DefineFunction({
 // The default export of the `SlackFunction()` call result is required to make it available for workflows.
 // You can pass the above "definition" object as the first argument.
 // The second argument is the handler function, which executes the function's logic.
-// Also, it needs ot be compatible with the definition's inputs/outputs.
+// Also, it must be compatible with the definition's inputs/outputs.
 export default SlackFunction(def, async ({
   // All the possible arguments as of this writing
   event, // all the metadata on this function execution event
   inputs, // the properties defined in input_parameters
-  env, // we don't use this time but you can set secrets by slack env command
+  env, // we don't use this time, but you can set secrets by slack env command
   team_id, // The connected workspace's ID
   enterprise_id, // The connected Enterprise Grid Org's ID (if that's not the case, this property can be an empty string)
-  client, // Slack API client -- if you need a direct access to its bot token, you can have `token` here too
+  client, // Slack API client -- if you need direct access to its bot token, you can have `token` as well
 }) => {
-  // Print everyting just to use all the arguments
+  // Print everything just to use all the arguments
   console.log(JSON.stringify({ event, inputs, env, team_id, enterprise_id }));
   // Call chat.postMessage API to post a message in a channel
   const response = await client.chat.postMessage({
