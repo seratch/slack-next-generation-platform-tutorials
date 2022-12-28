@@ -181,7 +181,7 @@ workflow.addStep(Schema.slack.functions.SendEphemeralMessage, {
   // The name of the element will be the key to access the value
   user_id: formStep.outputs.fields.recipient,
   channel_id: formStep.outputs.fields.channel,
-  message: "OpenForm's `outputs.fields`: ```" + formStep.outputs.fields + "```",
+  message: "OpenForm's `outputs.fields`: `" + formStep.outputs.fields + "`",
 });
 ```
 
