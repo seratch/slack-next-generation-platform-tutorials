@@ -4,11 +4,11 @@ An event trigger can be invoked when a specific event occurs in the connected Sl
 
 Also, there are two types of event triggers.
 
-The first one is the one that can capture events across a workspace. The example events are "channel_created" (A channel was created), "dnd_updated" (Do not Disturb settings changed for a member), "emoji_changed" (A custom emoji has been added or changed), "user_joined_team" (A new member has joined), and so on.
+The first one is the one that can capture events across a workspace. The example events are `"channel_created"` (A channel was created), `"dnd_updated"` (Do not Disturb settings changed for a member), `"emoji_changed"` (A custom emoji has been added or changed), `"user_joined_team"` (A new member has joined), and so on.
 
-Another is the one that can be invoked when events occur in any of the specified channels. The example events are "message_posted" (A message was sent to a channel), "user_joined_channel" (A user joined a public or private channel), "user_left_channel" (A user left a public or private channel), and so on.
+Another is the one that can be invoked when events occur in any of the specified channels. The example events are `"message_posted"` (A message was sent to a channel), `"reaction_added"` (A member has added an emoji reaction to an item), `"user_joined_channel"` (A user joined a public or private channel), `"user_left_channel"` (A user left a public or private channel), and so on.
 
-In this tutorial, you'll learn the first type of event, "channel_created".
+In this tutorial, you'll learn the first type of event, `"channel_created"`.
 
 ## Prerequisites
 
@@ -108,7 +108,7 @@ const trigger: Trigger<typeof workflow.definition> = {
 export default trigger;
 ```
 
-Note that the trigger's `event.event_type` must be `"slack#/events/channel_created"`. There are five possible input values from the trigger. To learn the latest list of the inputs, refer to the details of `data` property on [the official document page](https://api.slack.com/future/triggers/event#response-object).
+Note that the trigger's `event.event_type` must be `"slack#/events/channel_created"`. There are five possible input values from the trigger. To learn the latest list of the inputs, refer to the details of the `data` property on [the official documentation page](https://api.slack.com/future/triggers/event#response-object).
 
 And then, add the workflow to `manifest.ts`:
 
@@ -131,7 +131,7 @@ export default Manifest({
 });
 ```
 
-Note that, not only adding the workflow but also adding `"channels:read"` scope to `botScopes` is necessary for this event trigger. When you use a different even trigger in your app, check the required scopes for the trigger [here](https://api.slack.com/future/triggers/event#supported-events).
+Note that not only adding the workflow but also adding the `"channels:read"` scope to `botScopes` is necessary for this event trigger. When you use a different even trigger in your app, check the required scopes for the trigger [here](https://api.slack.com/future/triggers/event#supported-events).
 
 ## Create an Event Trigger
 
@@ -152,7 +152,7 @@ $ slack triggers create --trigger-def ./workflow_and_trigger.ts
 
 ## Create a New Public Channel
 
-Now the workflow is ready! Let's create a new **public** channel (as of this writing, the next-generation platform is still in beta, so it supports only public channel use cases so far; eventually private channels will be supported too) to see how it works.
+Now the workflow is ready! To confirm the behavior, let's create a new **public** channel (as of this writing, the next-generation platform is still in beta, so it supports only public channel use cases so far; eventually, private channels will be supported too).
 
 You will see the following outputs in the terminal window:
 
@@ -184,13 +184,13 @@ Also, you will see the following message in the channel that you just created:
 
 <img src="https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/19163/f0f53255-33a1-1b0a-68e9-dc9331ef56c1.png" width=500 />
 
-This workflow itself is not so useful, but you can build more meaningful ones such as sharing the tips and rules for channel owners in your worspace.
+This workflow itself may not be so useful, but you can build more meaningful ones such as sharing the tips and rules for channel owners in your worspace.
 
 ## A Few Things To Know
 
-If you're faimilar with the existing [Events API](https://api.slack.com/apis/connections/events-api), you may be confused with some difference between this next-generation platform's event triggers and Events API.
+If you're familiar with the existing [Events API](https://api.slack.com/apis/connections/events-api), you may be confused with some differences between this next-generation platform's event triggers and Events API.
 
-Events API consistently requires your app's membership in a channel. So, when your app receives an event, it means that your app always has the access to the channel content.
+Events API consistently requires your app's membership in a channel. So, when your app receives an event, it means that your app always has access to the channel content.
 
 Contrarily, with the next-gen platform's event triggers, your app's workflow can be invoked even when your app's bot user is not invited to the channel where the event happened.
 
