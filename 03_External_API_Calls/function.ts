@@ -1,14 +1,12 @@
 import { DefineFunction, Schema, SlackFunction } from "deno-slack-sdk/mod.ts";
-import { FunctionSourceFile } from "https://deno.land/x/deno_slack_source_file_resolver@0.1.5/mod.ts";
 
 // The metadada definition for the translator function
 export const def = DefineFunction({
   callback_id: "translate",
   title: "Translate",
   description: "Translate text using DeepL's API",
-  // This example code uses a 3rd party module "deno_slack_source_file_resolver"
-  // to automatically resolve the relative path of this source file.
-  source_file: FunctionSourceFile(import.meta.url),
+  // This path needs to be a relative path from the directory you place manifest.ts
+  source_file: "function.ts",
   input_parameters: {
     properties: {
       text: { type: Schema.types.string },

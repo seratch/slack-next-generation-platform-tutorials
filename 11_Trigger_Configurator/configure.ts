@@ -4,12 +4,11 @@ import {
   findTriggerToUpdate,
 } from "./manage_triggers.ts";
 import { joinAllChannels } from "./join_channels.ts";
-import { FunctionSourceFile } from "https://deno.land/x/deno_slack_source_file_resolver@0.1.5/mod.ts";
 
 export const def = DefineFunction({
   callback_id: "configure",
   title: "Configure a trigger",
-  source_file: FunctionSourceFile(import.meta.url),
+  source_file: "configure.ts",
   input_parameters: {
     properties: {
       workflowCallbackId: { type: Schema.types.string },

@@ -1,17 +1,13 @@
 import { DefineFunction, Schema, SlackFunction } from "deno-slack-sdk/mod.ts";
-import { FunctionSourceFile } from "https://deno.land/x/deno_slack_source_file_resolver@0.1.5/mod.ts";
 
 // Define the metadata of the function:
 // No need to be `def`. Any names work for you
 export const def = DefineFunction({
   callback_id: "my_send_message",
   title: "My SendMessage",
-  // Pass the relative path to this file from the project root directory:
-  // If you place this under functions/ directory, the string can be funtions/my_send_message.ts
-  // source_file: "my_send_message_with_comments.ts",
 
-  // A 3rd party module "deno_slack_source_file_resolver" automatically resolves the relative path
-  source_file: FunctionSourceFile(import.meta.url),
+  // This path needs to be a relative path from the directory you place manifest.ts
+  source_file: "my_send_message_with_commments.ts",
 
   // Define all the possible inputs with their names and types:
   // Having a description would be helpful for long-term maintenance, but it's optional.

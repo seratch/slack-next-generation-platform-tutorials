@@ -1,6 +1,6 @@
-In this tutorial, you'll learn how to get started with [Slack's next-generation platform](https://api.slack.com/future) in 5 minutes. 
+In this tutorial, you'll learn how to get started with [Slack's next-generation platform](https://api.slack.com/future) in 5 minutes.
 
-You may already know that, when creating a new app using `slack create` command, you can go with the official "Hello World" project template. The project template code is available at https://github.com/slack-samples/deno-hello-world 
+You may already know that, when creating a new app using `slack create` command, you can go with the official "Hello World" project template. The project template code is available at https://github.com/slack-samples/deno-hello-world
 
 The template is excellent for learning the platform! However, the project covers many things (app manifest, triggers, workflows, the built-in form function, your custom function, the built-in message function, the standard directory structure, and so on) at a time.
 
@@ -58,7 +58,7 @@ Connected, awaiting events
 
 If you see `Connected, awaiting events` log message, the app is successfully connected to Slack! You can hit "Ctrl + C" to terminate the local app process.
 
-This app is still empty. So, let's add some files to the project. As you may already notice, Slack's next-generation platform apps run on [Deno](https://deno.land/), a novel JavaScript runtime. Thus, for coding and editing files in your project, using [VS Code](https://code.visualstudio.com/) along with [the official Deno plugin](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno) is the best recommended. 
+This app is still empty. So, let's add some files to the project. As you may already notice, Slack's next-generation platform apps run on [Deno](https://deno.land/), a novel JavaScript runtime. Thus, for coding and editing files in your project, using [VS Code](https://code.visualstudio.com/) along with [the official Deno plugin](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno) is the best recommended.
 
 ## Hello World with Webhook Trigger
 
@@ -66,12 +66,13 @@ Your app on the next-generation platform can have multiple workflows. Also, each
 
 To learn how a trigger works, let's try an Incoming Webhooks Trigger as the first one. We're going to go through the following steps:
 
-* Create `workflow_and_trigger.ts`, which includes a workflow and its trigger
-* Grab a channel ID in your Slack workspace and embed it in the code
-* Add the workflow to `manifest.ts`
-* Re-install the app with the latest settings by running `slack run`
-* Create a trigger by running `slack triggers create --trigger-def ./workflow_and_trigger.ts`
-* Send a POST request to the webhook URL to start the workflow
+- Create `workflow_and_trigger.ts`, which includes a workflow and its trigger
+- Grab a channel ID in your Slack workspace and embed it in the code
+- Add the workflow to `manifest.ts`
+- Re-install the app with the latest settings by running `slack run`
+- Create a trigger by running
+  `slack triggers create --trigger-def ./workflow_and_trigger.ts`
+- Send a POST request to the webhook URL to start the workflow
 
 ### Define a Workflow and its Trigger
 
@@ -116,8 +117,8 @@ export default trigger;
 
 This source file does two things:
 
-* Define a new workflow for this app
-* Define a new Webhook trigger, which can start the workflow
+- Define a new workflow for this app
+- Define a new Webhook trigger, which can start the workflow
 
 There are still a few steps to reflect these changes for your app. So move on to the next.
 
@@ -125,9 +126,9 @@ There are still a few steps to reflect these changes for your app. So move on to
 
 You may notice a TODO comment in `workflow_and_trigger.ts`:
 
->`channel_id: "C03E94MKS", // TODO: Grab the ID in Slack UI`
+> `channel_id: "C03E94MKS", // TODO: Grab the ID in Slack UI`
 
-To resolve this, pick up a **public** channel to use for testing (Note that, as of this writing, the beta platform supports only public channels; Private channels will be supported when the feature is GAed). 
+To resolve this, pick up a **public** channel to use for testing (Note that, as of this writing, the beta platform supports only public channels; Private channels will be supported when the feature is GAed).
 
 The easiest way to know a channel ID is to click a channel name in the Slack client UI, scroll down to the bottom in the popup modal, and then copy the string starting with a "C" letter.
 
@@ -167,7 +168,7 @@ It's OK to stop `slack run` command, but for the following steps, you will use a
 
 Now that the workflow is available on the Slack cloud hosting infra side, you can generate its webhook trigger. This situation may need to be clarified; Just adding a workflow to your app's manifest does not automatically create the workflow's triggers. Thus, you need to generate a trigger on your own.
 
-You can run `slack triggers create` command to generate a trigger with prepared source code. 
+You can run `slack triggers create` command to generate a trigger with prepared source code.
 
 You'll see two options on the screen. Select the latter one with `(dev)` suffix this time.
 
@@ -213,12 +214,12 @@ You should see a "Hello World!" message in the channel. Congratulations! :tada::
 
 All the things you've done here are:
 
-* Create a blank project
-* Add `workflow_and_trigger.ts` to define a simple workflow and its webhook trigger
-* Add the workflow to `manifest.ts`
-* Re-install the dev app using `slack run` command
-* Create a trigger by `slack triggers create` command
-* Send an HTTP request to run the trigger
+- Create a blank project
+- Add `workflow_and_trigger.ts` to define a simple workflow and its webhook trigger
+- Add the workflow to `manifest.ts`
+- Re-install the dev app using `slack run` command
+- Create a trigger by `slack triggers create` command
+- Send an HTTP request to run the trigger
 
 You needed to go through a few steps, but I hope you felt this is much simpler and easier than you expected.
 
@@ -278,14 +279,17 @@ export default trigger;
 ```
 
 As you can see, many things are changed. Here is the list of the changes:
-* The workflow takes `channel_id` input parameter
-* `SendMessage` function uses the given `channel_id` input parameter instead of hard-coded channel ID
-* The `type` of the new trigger is `shortcut`, which means a link trigger
-* The trigger has `channel_id` in its inputs to pass it to the workflow
+
+- The workflow takes `channel_id` input parameter
+- `SendMessage` function uses the given `channel_id` input parameter instead of
+  hard-coded channel ID
+- The `type` of the new trigger is `shortcut`, which means a link trigger
+- The trigger has `channel_id` in its inputs to pass it to the workflow
 
 Check if there is no error with `slack run` command process' outputs.
 
-And then, create a new link trigger by running `slack triggers create --trigger-def ./workflow_and_trigger.ts`:
+And then, create a new link trigger by running
+`slack triggers create --trigger-def ./workflow_and_trigger.ts`:
 
 ```bash
 $ slack triggers create --trigger-def ./workflow_and_trigger.ts
@@ -299,7 +303,7 @@ $ slack triggers create --trigger-def ./workflow_and_trigger.ts
    URL: https://slack.com/shortcuts/Ft04DEBXXXXX/YYYY
 ```
 
-The `https://slack.com/shortcuts/Ft04DEBXXXXX/YYYY` is a link URL, which can be valid only inside the connected Slack workspace. You can share the URL either as a message with the URL or as one of the channel bookmark items. Once the link is shared, you'll see the button either in the unfurled message or as a select menu item in the channel's bookmark area. 
+The `https://slack.com/shortcuts/Ft04DEBXXXXX/YYYY` is a link URL, which can be valid only inside the connected Slack workspace. You can share the URL either as a message with the URL or as one of the channel bookmark items. Once the link is shared, you'll see the button either in the unfurled message or as a select menu item in the channel's bookmark area.
 
 Let's click the link! You'll see a "Hello World!" message in the channel shortly.
 
@@ -309,10 +313,10 @@ Let's click the link! You'll see a "Hello World!" message in the channel shortly
 
 You've learned the following points with this hands-on tutorial:
 
-* Create a workflow from scratch
-* Enable the workflow in `manifest.ts`
-* Create a webhook trigger to start a workflow
-* Create a link trigger to start a workflow
+- Create a workflow from scratch
+- Enable the workflow in `manifest.ts`
+- Create a webhook trigger to start a workflow
+- Create a link trigger to start a workflow
 
 The complete project is available at https://github.com/seratch/slack-next-generation-platform-tutorials/tree/main/01_The_Simplest_Hello_World
 
@@ -329,7 +333,7 @@ $ tree
     └── hello_world.ts
 ```
 
-To learn the standard project structure, you can generate projects using other templates such as "Hello World" and "Scaffold project". 
+To learn the standard project structure, you can generate projects using other templates such as "Hello World" and "Scaffold project".
 
 Also, you can use templates available under [`github.com/slack-samples` organization](https://github.com/orgs/slack-samples/repositories?q=deno-&type=public&language=&sort=) too! For instance, you can use https://github.com/slack-samples/deno-request-time-off as a template this way:
 
@@ -337,6 +341,6 @@ Also, you can use templates available under [`github.com/slack-samples` organiza
 slack create my-time-off-app -t slack-samples/deno-request-time-off
 ```
 
-I hope you enjoy this tutorial! I'll publish a few more tutorials on the next-generation platform. If you have any comments or feedback, please feel free to let me know on Twitter ([@seratch](https://twitter.com/seratch)) or elsewhere I can check out!
+I hope you enjoy this tutorial! I'll publish a few more tutorials on the next-generation platform. If you have any comments or feedback, please feel free to let me know on Twitter ([@seratch](https://twitter.com/seratch)) or elsewher I can check out!
 
 Happy hacking with Slack's next-generation platform :rocket:

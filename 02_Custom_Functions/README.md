@@ -113,7 +113,8 @@ $ slack triggers create --trigger-def ./workflow_and_trigger.ts
    affectionate-panther-654 (dev) A04DHV08MPF
 ```
 
-If everything goes well, you will get a link trigger to start your demo workflow:
+If everything goes well, you will get a link trigger to start your demo
+workflow:
 
 ```bash
 $ slack triggers create --trigger-def ./workflow_and_trigger.ts
@@ -127,7 +128,7 @@ $ slack triggers create --trigger-def ./workflow_and_trigger.ts
    URL: https://slack.com/shortcuts/Ft04DEBXXXXX/YYYY
 ```
 
-You can share the link in the connected Slack workspace by posting a  message with the URL. You'll see a button to click as the attachment of the message.
+You can share the link in the connected Slack workspace by posting a message with the URL. You'll see a button to click as the attachment of the message.
 
 Every time you click the link, you'll see a "Hello World!" message in the channel shortly.
 
@@ -135,9 +136,9 @@ Every time you click the link, you'll see a "Hello World!" message in the channe
 
 OK, no surprise. We can go further now!
 
-#### Add Your First Custom Function `my_send_message.ts`
+### Add Your First Custom Function `my_send_message.ts`
 
-You may want to add your custom function to the existing single source file `workflow_and_trigger.ts`. However, unfortunately, it's not feasible to add functions to the existing file. 
+You may want to add your custom function to the existing single source file `workflow_and_trigger.ts`. However, unfortunately, it's not feasible to add functions to the existing file.
 
 This is because the platform expects `default export` of `SlackFunction()` call result, which is required for finding a function's handler code in the relative `source_file` path. For this reason, developers need to have a dedicated source file for each custom function.
 
@@ -145,12 +146,11 @@ So, create a new file named `my_send_message.ts` with the following content:
 
 ```typescript
 import { DefineFunction, Schema, SlackFunction } from "deno-slack-sdk/mod.ts";
-import { FunctionSourceFile } from "https://deno.land/x/deno_slack_source_file_resolver@0.1.5/mod.ts";
 
 export const def = DefineFunction({
   callback_id: "my_send_message",
   title: "My SendMessage",
-  source_file: FunctionSourceFile(import.meta.url),
+  source_file: "my_send_message.ts",
   input_parameters: {
     properties: {
       channel_id: { type: Schema.slack.types.channel_id },
@@ -212,7 +212,8 @@ workflow.addStep(MySendMessage, {
 });
 ```
 
-Click the trigger in the channel again. You'll see the workflow works in the same way! Also, our `slack run` terminal window should display logs:
+Click the trigger in the channel again. You'll see the workflow works in the
+same way! Also, our `slack run` terminal window should display logs:
 
 ```
 chat.postMessage result: {
@@ -238,19 +239,15 @@ Before wrapping up this tutorial, let me share more details on how to develop a 
 
 ```typescript
 import { DefineFunction, Schema, SlackFunction } from "deno-slack-sdk/mod.ts";
-import { FunctionSourceFile } from "https://deno.land/x/deno_slack_source_file_resolver@0.1.5/mod.ts";
 
 // Define the metadata of the function:
 // No need to be `def`. Any names work for you
 export const def = DefineFunction({
   callback_id: "my_send_message",
   title: "My SendMessage",
-  // Pass the relative path to this file from the project root directory:
-  // If you place this under functions/ directory, the string can be funtions/my_send_message.ts
-  // source_file: "my_send_message_with_comments.ts",
 
-  // A 3rd party module "deno_slack_source_file_resolver" automatically resolves the relative path
-  source_file: FunctionSourceFile(import.meta.url),
+  // This path needs to be a relative path from the directory you place manifest.ts
+  source_file: "my_send_message.ts",
 
   // Define all the possible inputs with their names and types:
   // Having a description would be helpful for long-term maintenance, but it's optional.
@@ -313,8 +310,8 @@ export default SlackFunction(def, async ({
 
 You've learned the following points with this hands-on tutorial:
 
-* Create a custom function
-* Add the function to a workflow
+- Create a custom function
+- Add the function to a workflow
 
 The complete project is available at https://github.com/seratch/slack-next-generation-platform-tutorials/tree/main/02_Custom_Functions
 

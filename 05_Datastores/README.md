@@ -46,7 +46,7 @@ Connected, awaiting events
 
 If you see `Connected, awaiting events` log message, the app is successfully connected to Slack. You can hit "Ctrl + C" to terminate the local app process.
 
-In this tutorial, you will learn how to talk to your datastores using CLI, and then via your function code. 
+In this tutorial, you will learn how to talk to your datastores using CLI, and then via your function code.
 
 ## Add Datastores to Your App
 
@@ -212,12 +212,13 @@ Also, **you must use `Schema.types.string` type for your datastore's primary key
 You've already tried a simple query without an expression. Now let's try a more realistic query to fetch data. Slack's datastores enable developers to use [Amazon DynamoDB query syntax](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.OperatorsAndFunctions.html) for query conditions. More specifically, `expression`, `expression_attributes`, `expression_values` need to be passed when performing a query.
 
 Let's run a query with this condition:
+
 ```json
 {
   "datastore": "tasks",
   "expression": "begins_with(#title, :title)",
-  "expression_attributes": {"#title": "title"},
-  "expression_values": {":title": "Make a "}
+  "expression_attributes": { "#title": "title" },
+  "expression_values": { ":title": "Make a " }
 }
 ```
 
@@ -337,12 +338,11 @@ The CLI commands are convenient for ad-hoc queries or initial data imports. Howe
 ```typescript
 import { DefineFunction, SlackFunction } from "deno-slack-sdk/mod.ts";
 // Add "deno-slack-source-file-resolver/" to "imports" in ./import_map.json
-import { FunctionSourceFile } from "deno-slack-source-file-resolver/mod.ts";
 
 export const def = DefineFunction({
   callback_id: "datastore-demo",
   title: "Datastore demo",
-  source_file: FunctionSourceFile(import.meta.url),
+  source_file: "function.ts",
   input_parameters: { properties: {}, required: [] },
   output_parameters: { properties: {}, required: [] },
 });
@@ -540,9 +540,9 @@ With that being said, when your local CLI has permission to deploy the "prod" ap
 
 You've learned the following points with this hands-on tutorial:
 
-* Save data and run queries toward Slack datastores via CLI commands
-* Save data and run queries toward Slack datastores via function code
-* Delete an unnecessary app using `slack uninstall` command
+- Save data and run queries toward Slack datastores via CLI commands
+- Save data and run queries toward Slack datastores via function code
+- Delete an unnecessary app using `slack uninstall` command
 
 The complete project is available at https://github.com/seratch/slack-next-generation-platform-tutorials/tree/main/05_Datastores
 

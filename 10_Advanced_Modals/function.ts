@@ -1,10 +1,9 @@
 import { DefineFunction, Schema, SlackFunction } from "deno-slack-sdk/mod.ts";
-import { FunctionSourceFile } from "https://deno.land/x/deno_slack_source_file_resolver@0.1.5/mod.ts";
 
 export const def = DefineFunction({
   callback_id: "modal-example",
   title: "Modal interaction example",
-  source_file: FunctionSourceFile(import.meta.url),
+  source_file: "function.ts",
   input_parameters: {
     properties: { interactivity: { type: Schema.slack.types.interactivity } },
     required: ["interactivity"],

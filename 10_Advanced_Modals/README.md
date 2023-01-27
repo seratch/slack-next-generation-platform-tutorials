@@ -95,12 +95,11 @@ Since you don't have `function.ts` yet, the compilation should fail. Let's add t
 
 ```typescript
 import { DefineFunction, Schema, SlackFunction } from "deno-slack-sdk/mod.ts";
-import { FunctionSourceFile } from "https://deno.land/x/deno_slack_source_file_resolver@0.1.5/mod.ts";
 
 export const def = DefineFunction({
   callback_id: "modal-example",
   title: "Modal interaction example",
-  source_file: FunctionSourceFile(import.meta.url),
+  source_file: "function.ts",
   input_parameters: {
     properties: { interactivity: { type: Schema.slack.types.interactivity } },
     required: ["interactivity"],
@@ -250,9 +249,9 @@ export default SlackFunction(
 
 I'll explain the details later, but the key points are:
 
-* The first handler opens a modal for the end-user
-* Dispatch modal data submission events using `addViewSubmissionHandler()`'s handler registration + a modal's `callback_id`
-* Dispatch modal closure events using `addViewClosedHandler()`'s handler registration + a modal's `callback_id`
+- The first handler opens a modal for the end-user
+- Dispatch modal data submission events using `addViewSubmissionHandler()`'s handler registration + a modal's `callback_id`
+- Dispatch modal closure events using `addViewClosedHandler()`'s handler registration + a modal's `callback_id`
 
 ## Create a Link Trigger
 
@@ -332,8 +331,8 @@ Lastly, your app can handle all the modal closure events by a single handler reg
 
 The handlers registered by `addViewSubmissionHandler()` **must complete within 3 seconds** (as of this writing, the duration is a bit longer, but it may be changed in the near future). If your handler runs some time-consuming tasks, there are two options:
 
-* Update the modal with "Processing..." view first, pass the bot token to the backend service, and then call `views.update` API when the process completes on the backend side
-* End the interactions on the modal and then continue the communications with the same user in DM or elsewhere
+- Update the modal with "Processing..." view first, pass the bot token to the backend service, and then call `views.update` API when the process completes on the backend side
+- End the interactions on the modal and then continue the communications with the same user in DM or elsewhere
 
 Also, if you're already familiar with [Slack' modals](https://api.slack.com/surfaces/modals/using) for a long time, you might be confused with the necessity to pass `interactivity_pointer` instead of `trigger_id`. Actually, these work in the same way. The only difference is the way to get a value. You can get `interactivity_pointer` only from `inputs.interactivity` while the existing platform features provide `trigger_id` in interactive event payloads.
 
@@ -341,8 +340,8 @@ Also, if you're already familiar with [Slack' modals](https://api.slack.com/surf
 
 You've learned the following points with this hands-on tutorial:
 
-* Start a full-feature modal in your custom function
-* Handle data submissions from a full-feature modal
+- Start a full-feature modal in your custom function
+- Handle data submissions from a full-feature modal
 
 The complete project is available at https://github.com/seratch/slack-next-generation-platform-tutorials/tree/main/10_Advanced_Modals
 

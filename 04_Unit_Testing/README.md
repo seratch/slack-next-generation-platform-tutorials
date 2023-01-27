@@ -49,30 +49,34 @@ If you see `Connected, awaiting events` log message, the app is successfully con
 ## What You'll Do
 
 You'll add three functions and write tests for all of them:
-* [`echo.ts`](https://github.com/seratch/slack-next-generation-platform-tutorials/blob/main/04_Unit_Testing/echo.ts), which may convert an input text and return the result in outputs
-* [`my_send_message.ts`](https://github.com/seratch/slack-next-generation-platform-tutorials/blob/main/04_Unit_Testing/my_send_message.ts), which posts a message in a Slack channel
-* [`translate.ts`](https://github.com/seratch/slack-next-generation-platform-tutorials/blob/main/04_Unit_Testing/translate.ts), which translates a given text into a different language using DeepL's API
 
-Usually, you'll add a workflow and trigger to run your app, but this tutorial focuses on unit testing for functions. Thus, you don't necessarily have to add any workflows and triggers this time. 
+- [`echo.ts`](https://github.com/seratch/slack-next-generation-platform-tutorials/blob/main/04_Unit_Testing/echo.ts),
+  which may convert an input text and return the result in outputs
+- [`my_send_message.ts`](https://github.com/seratch/slack-next-generation-platform-tutorials/blob/main/04_Unit_Testing/my_send_message.ts),
+  which posts a message in a Slack channel
+- [`translate.ts`](https://github.com/seratch/slack-next-generation-platform-tutorials/blob/main/04_Unit_Testing/translate.ts),
+  which translates a given text into a different language using DeepL's API
+
+Usually, you'll add a workflow and trigger to run your app, but this tutorial focuses on unit testing for functions. Thus, you don't necessarily have to add any workflows and triggers this time.
 
 If you want to make sure if your functions work in connected Slack workspaces, you can add a workflow that run them. Refer to my past tutorials to learn how to add workflows and triggers:
-* [Define the workflow/trigger for `my_send_message.ts`](https://dev.to/seratch/slack-next-gen-platform-custom-functions-3pi8)
-* [Define the workflow/trigger for `translate.ts`](https://dev.to/seratch/slack-next-gen-platform-external-api-calls-1i76)
+
+- [Define the workflow/trigger for `my_send_message.ts`](https://dev.to/seratch/slack-next-gen-platform-custom-functions-3pi8)
+- [Define the workflow/trigger for `translate.ts`](https://dev.to/seratch/slack-next-gen-platform-external-api-calls-1i76)
 
 Also, if you're not yet familiar with writing custom functions, I'd highly recommend reading my ["Custom Functions" tutorial](https://dev.to/seratch/slack-next-gen-platform-custom-functions-3pi8) before going through this tutorial.
 
 ## Add `echo.ts` and its Tests
 
-Let's start with a quite simple function `echo`, which returns an input text as-is in returned `outputs`. In the case where the function caller passes `calipalize: true` in `inputs`, the function can transform the text. 
+Let's start with a quite simple function `echo`, which returns an input text as-is in returned `outputs`. In the case where the function caller passes `calipalize: true` in `inputs`, the function can transform the text.
 
 ```typescript
 import { DefineFunction, Schema, SlackFunction } from "deno-slack-sdk/mod.ts";
-import { FunctionSourceFile } from "https://deno.land/x/deno_slack_source_file_resolver@0.1.5/mod.ts";
 
 export const def = DefineFunction({
   callback_id: "echo",
   title: "Echo inputs",
-  source_file: FunctionSourceFile(import.meta.url),
+  source_file: "echo.ts",
   input_parameters: {
     properties: {
       text: { type: Schema.types.string },
@@ -98,43 +102,30 @@ export default SlackFunction(def, ({ inputs }) => {
 
 #### Having Aliases in `import_map.json`
 
-Before moving on to the test code topic, let me share an interesting technique in Deno coding. When you have an external dependency in your code, the source of import needs to be a full package hosting URL. For instance, in the above code, `deno_slack_source_file_resolver` module is set to version 0.1.5.
-
-```typescript
-import { FunctionSourceFile } from
-  "https://deno.land/x/deno_slack_source_file_resolver@0.1.5/mod.ts";
-```
+Before moving on to the test code topic, let me share an interesting technique in Deno coding.
 
 Since [the Deno VS Code extension](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno) helps you quickly resolve the URL, you may have something like this a lot already. It's totally fine! but when you notice a lot of imports for the same module in your project, you may think, "Would it be possible to avoid repeating this?". To manage the dependency versions in a single configuration, you can configure `import_map.json`. Note that your `deno.jsonc` must have `"importMap": "import_map.json"` in it (`slack create` command does this for you).
 
-To avoid repeating https://deno.land/x/deno_slack_source_file_resolver with its version in your source code, let's add a new line to `import_map.json`:
+To avoid repeating https://deno.land/std@0.174.0/ with its version in your source code, let's add a new line to `import_map.json`:
 
 ```json
 {
   "imports": {
     "deno-slack-sdk/": "https://deno.land/x/deno_slack_sdk@1.4.3/",
     "deno-slack-api/": "https://deno.land/x/deno_slack_api@1.5.0/",
-    "deno-slack-source-file-resolver/": "https://deno.land/x/deno_slack_source_file_resolver@0.1.5/"
-  }
+    "std/": "https://deno.land/std@0.174.0/"
 }
 ```
 
-Once you add the above, you can eliminate the version part from the imports:
+With this, you can import the std module just by "std/_" instead of "https://deno.land/std@0.174.0/_".
 
-```typescript
-// Add "deno-slack-source-file-resolver/": "https://deno.land/x/deno_slack_source_file_resolver@0.1.5/"
-// to "imports" in ./import_map.json
-import { FunctionSourceFile } from "deno-slack-source-file-resolver/mod.ts";
-```
-
-From here, I'll use a few aliases for imports in this tutorial. The complete `import_map.json` for this tutorial looks like below. 
+From here, I'll use a few aliases for imports in this tutorial. The complete `import_map.json` for this tutorial looks like below.
 
 ```json
 {
   "imports": {
     "deno-slack-sdk/": "https://deno.land/x/deno_slack_sdk@1.4.3/",
     "deno-slack-api/": "https://deno.land/x/deno_slack_api@1.5.0/",
-    "deno-slack-source-file-resolver/": "https://deno.land/x/deno_slack_source_file_resolver@0.1.5/",
     "mock-fetch/": "https://deno.land/x/mock_fetch@0.3.0/",
     "std/": "https://deno.land/std@0.170.0/"
   }
@@ -148,7 +139,7 @@ Slack's next-generation platform templates encourage developers to use hyphen-se
 Now that the test target is ready, let's write your first Deno test code. Create a new file named `echo_test.ts` with the following content:
 
 ```typescript
-// Add "std/": "https://deno.land/std@0.170.0/" to "imports" in ./import_map.json
+// Add "std/": "https://deno.land/std@0.173.0/" to "imports" in ./import_map.json
 import { assertEquals } from "std/testing/asserts.ts";
 import { SlackFunctionTester } from "deno-slack-sdk/mod.ts";
 // `createContext` utility helps you build valid arguments for functions
@@ -170,23 +161,10 @@ In this code, the only Slack next-generation app-specific parts are `SlackFuncti
 
 Deno testing is so simple. You don't need to add any other configuration files. Also, you can usually run tests just by hitting `deno test`.
 
-However, when your code requires [additionl permissions](https://deno.land/manual/basics/permissions) such as file system read access, network access, and env variable access, you need to append options to `deno test` command. Specifically, the above test target uses `FunctionSourceFile`, which requires file-system access. So, your test command is `deno test --allow-read`. In a similar way, when your code requires network access, your `deno test` command needs `--allow-net`.
-
-If you don't want to memorize the necessary options (probably no one wants to remember it!), you can add a `deno task` to `deno.jsonc`. With the following setting, you can do the same by running `deno task test`:
-
-```json
-{
-  "importMap": "import_map.json",
-  "tasks": {
-    "test": "deno test --allow-read"
-  }
-}
-```
-
-The last tip is that you can pass the file path to the command if you want to run only a single test. For example, in the case of `echo_test.ts`, you can run `deno test --allow-read echo_test.ts`.
+The last tip is that you can pass the file path to the command if you want to run only a single test. For example, in the case of `echo_test.ts`, you can run `deno test echo_test.ts`.
 
 ```bash
-$ deno test --allow-read echo_test.ts
+$ deno test echo_test.ts
 running 1 test from ./echo_test.ts
 Return the input text as-is ... ok (6ms)
 
@@ -208,7 +186,7 @@ Deno.test("Return the capitalized input text as-is when capitalize: true", async
 Rerun the same test code. You will see a bit different output this time:
 
 ```bash
-$ deno test --allow-read echo_test.ts
+$ deno test echo_test.ts
 running 2 tests from ./echo_test.ts
 Return the input text as-is ... ok (5ms)
 Return the capitalized input text as-is when capitalize: true ... ok (4ms)
@@ -225,7 +203,7 @@ assertEquals(outputs?.text, "HI THERE!!");
 When running the test again, the second test suite should fail as below:
 
 ```bash
-$ deno test --allow-read echo_test.ts
+$ deno test echo_test.ts
 running 2 tests from ./echo_test.ts
 Return the input text as-is ... ok (5ms)
 Return the capitalized input text as-is when capitalize: true ... FAILED (7ms)
@@ -266,13 +244,11 @@ Let's start with adding the test target to your project. Create a new file named
 
 ```typescript
 import { DefineFunction, Schema, SlackFunction } from "deno-slack-sdk/mod.ts";
-// Add "deno-slack-source-file-resolver/": "https://deno.land/x/deno_slack_source_file_resolver@0.1.5/" to "imports" in ./import_map.json
-import { FunctionSourceFile } from "deno-slack-source-file-resolver/mod.ts";
 
 export const def = DefineFunction({
   callback_id: "my_send_message",
   title: "My SendMessage",
-  source_file: FunctionSourceFile(import.meta.url),
+  source_file: "my_send_message.ts",
   input_parameters: {
     properties: {
       channel_id: { type: Schema.slack.types.channel_id },
@@ -322,7 +298,7 @@ Deno.test("Send a message successfully", async () => {
 Run the test and see how it fails:
 
 ```bash
-$ deno test --allow-read my_send_message_test.ts
+$ deno test my_send_message_test.ts
 running 1 test from ./my_send_message_test.ts
 Send a message successfully ... FAILED (7ms)
 
@@ -354,12 +330,13 @@ error: Test failed
 
 As you saw, the code performs an HTTP request toward a slack.com endpoint. Thus, the `--allow-net` option is necessary if you want to run the code as-is.
 
->error: PermissionDenied: Requires net access to "slack.com", run again with the --allow-net flag
+> error: PermissionDenied: Requires net access to "slack.com", run again with
+> the --allow-net flag
 
 Checking the behavior of `--allow-net` option is not our goal here, but let's see how it fails.
 
 ```bash
-$ deno test --allow-read --allow-net my_send_message_test.ts
+$ deno test --allow-net my_send_message_test.ts
 running 1 test from ./my_send_message_test.ts
 Send a message successfully ...
 ------- output -------
@@ -443,7 +420,7 @@ Deno.test("Send a message successfully", async () => {
 Rerun the test. You'll see it succeeds as below:
 
 ```bash
-$ deno test --allow-read --allow-net my_send_message_test.ts
+$ deno test --allow-net my_send_message_test.ts
 running 1 test from ./my_send_message_test.ts
 Send a message successfully ...
 ------- output -------
@@ -481,7 +458,7 @@ Deno.test("Fail to send a message to an unknown channel", async () => {
 When you run the test again, the outputs should be like the below:
 
 ```bash
-$ deno test --allow-read my_send_message_test.ts
+$ deno test my_send_message_test.ts
 running 3 tests from ./my_send_message_test.ts
 Send a message successfully ...
 ------- output -------
@@ -513,7 +490,7 @@ ok | 3 passed | 0 failed (59ms)
 
 ### Want to remove `console.log()`?
 
-Although Slack's official examples suggest using `console.log()` for simple logging, you may dislike lots of `------- output -------` outputs in test results. If yes, switching to [Deno's standard logger](https://deno.land/std/log/mod.ts) and passing the log level in `env` can be a simple solution. 
+Although Slack's official examples suggest using `console.log()` for simple logging, you may dislike lots of `------- output -------` outputs in test results. If yes, switching to [Deno's standard logger](https://deno.land/std/log/mod.ts) and passing the log level in `env` can be a simple solution.
 
 Here is a quick example. You can add `logger.ts`:
 
@@ -588,17 +565,13 @@ Create a new file named `translate.ts` with the following source code. If you've
 
 ```typescript
 import { DefineFunction, Schema, SlackFunction } from "deno-slack-sdk/mod.ts";
-// Add "deno-slack-source-file-resolver/": "https://deno.land/x/deno_slack_source_file_resolver@0.1.5/" to "imports" in ./import_map.json
-import { FunctionSourceFile } from "deno-slack-source-file-resolver/mod.ts";
 
 // The metadata definition for the translator function
 export const def = DefineFunction({
   callback_id: "translate",
   title: "Translate",
   description: "Translate text using DeepL's API",
-  // This example code uses a 3rd party module "deno_slack_source_file_resolver"
-  // to automatically resolve the relative path of this source file.
-  source_file: FunctionSourceFile(import.meta.url),
+  source_file: "translate.ts",
   input_parameters: {
     properties: {
       text: { type: Schema.types.string },
@@ -721,7 +694,7 @@ Deno.test("Fail to traslate text with an invalid token", async () => {
 
 The only difference is that `mf.mock("POST@/v2/translate", handler)` part.
 
-You may wonder if it's feasible to set the domain of an endpoint in the `mf.mock()` method call. As far as I know, it's not yet supported on the [mock_fetch library](https://deno.land/x/mock_fetch) side as of this writing. So, if you have conflicts on the path among a few domains, checking the `url` in arguments to dispatch requests is a reasonable workaround. 
+You may wonder if it's feasible to set the domain of an endpoint in the `mf.mock()` method call. As far as I know, it's not yet supported on the [mock_fetch library](https://deno.land/x/mock_fetch) side as of this writing. So, if you have conflicts on the path among a few domains, checking the `url` in arguments to dispatch requests is a reasonable workaround.
 
 ```typescript
 mf.mock("POST@/v2/translate", (args) => {
@@ -742,11 +715,10 @@ When I figure out the best practices for those patterns (or the Deno SDK provide
 
 You've learned the following points with this hands-on tutorial:
 
-* Write Deno test code for your functions
-* Prepare `inputs`, `env`, and so on for function testing
-* Use mock objects for `fetch` function calls
-* Customize `import_map.json` to have aliases for module paths
-* Use the `deno` command options such as `--allow-read`
+- Write Deno test code for your functions
+- Prepare `inputs`, `env`, and so on for function testing
+- Use mock objects for `fetch` function calls
+- Customize `import_map.json` to have aliases for module paths
 
 The complete project is available at https://github.com/seratch/slack-next-generation-platform-tutorials/tree/main/04_Unit_Testing
 

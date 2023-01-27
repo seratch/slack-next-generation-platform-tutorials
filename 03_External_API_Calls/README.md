@@ -54,8 +54,8 @@ In this tutorial, I will skip the basics of custom functions. If you haven't rea
 
 In this tutorial's instructions, you'll add the following two files to the blank project:
 
-* `workflow_and_trigger.ts`, which defines a workflow and its link trigger
-* `function.ts`, which defines a custom function that performs external API calls
+- `workflow_and_trigger.ts`, which defines a workflow and its link trigger
+- `function.ts`, which defines a custom function that performs external API calls
 
 Let's start by creating `workflow_and_trigger.ts` with the minimum definition as below. We will add three function steps to the workflow later on.
 
@@ -157,7 +157,9 @@ You can share the link in the connected Slack workspace by posting a message wit
 ## Add Three Functions to the Workflow
 
 Your workflow and its link trigger are now ready for running. However, the workflow does not have any meaningful functions. It's time to add three functions, including your custom one, to the workflow:
-1. Add the built-in `OpenForm` to collect an end-user's inputs (the original text and the language to translate into)
+
+1. Add the built-in `OpenForm` to collect an end-user's inputs (the original
+   text and the language to translate into)
 1. Add your custom function `translate`, which translates the given text
 1. Add the built-in `SendMessage` to post the result in the channel
 
@@ -165,16 +167,13 @@ The built-in ones are already available to use. The last remaining task is to ad
 
 ```typescript
 import { DefineFunction, Schema, SlackFunction } from "deno-slack-sdk/mod.ts";
-import { FunctionSourceFile } from "https://deno.land/x/deno_slack_source_file_resolver@0.1.5/mod.ts";
 
 // The metadata definition for the translator function
 export const def = DefineFunction({
   callback_id: "translate",
   title: "Translate",
   description: "Translate text using DeepL's API",
-  // This example code uses a 3rd party module "deno_slack_source_file_resolver"
-  // to automatically resolve the relative path of this source file.
-  source_file: FunctionSourceFile(import.meta.url),
+  source_file: "function.ts",
   input_parameters: {
     properties: {
       text: { type: Schema.types.string },
@@ -239,7 +238,8 @@ export default SlackFunction(def, async ({ inputs, env }) => {
 
 This function requires [a valid DeepL API auth key](https://support.deepl.com/hc/en-us/articles/360020695820). If you don't have a DeepL developer account yet (note that a developer account is different from the typical user account), visit [their registration page](https://www.deepl.com/pro#developer) to create a new one. Once your account is activated, you can get your "Authentication Key for DeepL API" on [your DeepL developer account page](https://www.deepl.com/account/summary).
 
-You may desire to write the auth key in the code (because it's so easy!), but we don't recommend hard-coding it in the source code from a security perspective. Alternatively, you can use `env` variables to pass credentials and confidential information.
+You may desire to write the auth key in the code (because it's so easy!), but we don't recommend hard-coding it in the source code from a security perspective. Alternatively, you can use `env` variables to pass credentials and confidential
+information.
 
 When you run a "(dev)" version of your app using `slack run` command, you can place `.env` file in your project's root directory. Create `.env` file and save the following content in it:
 
@@ -314,7 +314,7 @@ workflow.addStep(Schema.slack.functions.SendMessage, {
 });
 ```
 
-You may still be unfamiliar with the built-in `OpenForm` function. Don't worry about it for now! Just using the form as an end-user in Slack UI should be very intuitive. Contrarily, there may be a few things to learn when you build uour own forms. To guide you on how to develop it, I'll publish another article on how to create forms soon. Stay tuned!
+You may still be unfamiliar with the built-in `OpenForm` function. Don't worry about it for now! Just using the form as an end-user in Slack UI should be very intuitive. Contrarily, there may be a few things to learn when you build your own forms. To guide you on how to develop it, I'll publish another article on how to create forms soon. Stay tuned!
 
 Now that the workflow is complete let's start with the link trigger. When you click it, you'll see a popup modal form like the one below.
 
@@ -342,9 +342,9 @@ I do understand there may be different opinions on the relations between nationa
 
 You've learned the following points with this hands-on tutorial:
 
-* Create a function that performs external API calls
-* Enable external domain accesses in `manifest.ts`
-* Add env variables for workflows and functions
+- Create a function that performs external API calls
+- Enable external domain accesses in `manifest.ts`
+- Add env variables for workflows and functions
 
 The complete project is available at https://github.com/seratch/slack-next-generation-platform-tutorials/tree/main/03_External_API_Calls
 

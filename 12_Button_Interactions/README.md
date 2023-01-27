@@ -131,12 +131,11 @@ Since `handle_interactive_blocks.ts` does not exist, the TS compilation should f
 
 ```typescript
 import { DefineFunction, Schema, SlackFunction } from "deno-slack-sdk/mod.ts";
-import { FunctionSourceFile } from "https://deno.land/x/deno_slack_source_file_resolver@0.1.5/mod.ts";
 
 export const def = DefineFunction({
   callback_id: "handle_interactive_blocks",
   title: "Handle button clicks in interactive_blocks",
-  source_file: FunctionSourceFile(import.meta.url),
+  source_file: "handle_interactive_blocks.ts",
   input_parameters: {
     // The input values from the SendMessage function's interactive_blocks
     properties: {
@@ -324,12 +323,11 @@ Create a new file named `send_interactive_message.ts`. This source file defines 
 
 ```typescript
 import { DefineFunction, Schema, SlackFunction } from "deno-slack-sdk/mod.ts";
-import { FunctionSourceFile } from "https://deno.land/x/deno_slack_source_file_resolver@0.1.5/mod.ts";
 
 export const def = DefineFunction({
   callback_id: "send_interactive_message",
   title: "Send a message with interactive blocks",
-  source_file: FunctionSourceFile(import.meta.url),
+  source_file: "send_interactive_message.ts",
   input_parameters: {
     properties: {
       user_id: { type: Schema.slack.types.user_id },

@@ -1,11 +1,9 @@
 import { DefineFunction, SlackFunction } from "deno-slack-sdk/mod.ts";
-// Add "deno-slack-source-file-resolver/" to "imports" in ./import_map.json
-import { FunctionSourceFile } from "deno-slack-source-file-resolver/mod.ts";
 
 export const def = DefineFunction({
   callback_id: "datastore-demo",
   title: "Datastore demo",
-  source_file: FunctionSourceFile(import.meta.url),
+  source_file: "function.ts",
   input_parameters: { properties: {}, required: [] },
   output_parameters: { properties: {}, required: [] },
 });
